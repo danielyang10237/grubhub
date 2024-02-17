@@ -1,11 +1,20 @@
-use std::fs;
+use std::{
+    fmt::Debug,
+    net::{Ipv4Addr, SocketAddrV4},
+};
 
-use axum::{routing::get, Router};
-use bb8::ManageConnection;
-use bb8_sqlite::RusqliteConnectionManager;
+use axum::http::StatusCode;
 use color_eyre::Result;
-use tokio::net::TcpListener;
-use tracing_subscriber::{util::SubscriberInitExt, EnvFilter};
+use tokio::{fs, net::TcpListener};
+use tracing::{error, info, instrument};
+use tracing_subscriber::util::SubscriberInitExt;
+
+use crate::connection::connect;
+
+mod connection;
+mod example;
+mod handlers;
+mod types;
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -14,74 +23,58 @@ async fn main() -> Result<()> {
 
 async fn main2() -> Result<()> {
     tracing_subscriber::fmt()
-        .with_env_filter(EnvFilter::from_default_env())
+        // .with_env_filter(EnvFilter::from_default_env())
         .pretty()
         .finish()
         .init();
 
-    _ = fs::remove_file("treehacks.db");
+    _ = fs::remove_file("treehacks.db").await;
 
-    tracing::trace!("hi!");
+    info!("start");
 
-    let connection_manager = RusqliteConnectionManager::new("treehacks.db");
+    setup().await?;
+    example::example_setup().await?;
 
-    let conn = connection_manager.connect().await?;
+    let app = handlers::router();
 
-    conn.pragma_update(None, "FOREIGN_KEY", "ON")?;
-    conn.execute_batch(CREATE_TABLES)?;
+    let port = 3000;
+    let addr = SocketAddrV4::new(Ipv4Addr::new(0, 0, 0, 0), port);
+    let listener = TcpListener::bind(addr).await?;
 
-    let app = Router::new().route("/", get(|| async { "Hello, World!" }));
+    info!("listening on {addr}");
 
-    let listener = TcpListener::bind("0.0.0.0:3000").await?;
     axum::serve(listener, app).await?;
     Ok(())
 }
 
-const CREATE_TABLES: &str = r#"
-CREATE TABLE users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL
-);
+#[instrument]
+async fn setup() -> color_eyre::Result<()> {
+    let sql = fs::read_to_string("sql/schema.sql").await?;
+    let conn = connect().await?;
+    conn.pragma_update(None, "FOREIGN_KEY", "ON")?;
+    conn.execute_batch(&sql)?;
+    Ok(())
+}
 
-CREATE TABLE groups (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    commitment INTEGER
-);
+trait IntoStatusCode {
+    type Value;
 
-CREATE TABLE events (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    start_time TEXT NOT NULL,
-    end_time TEXT NOT NULL
-);
+    fn into_status_code(self) -> Result<Self::Value, StatusCode>;
+}
 
-CREATE TABLE interests (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL
-);
+impl<T, E> IntoStatusCode for Result<T, E>
+where
+    E: Debug,
+{
+    type Value = T;
 
-CREATE TABLE group_members (
-    group_id REFERENCES groups(id),
-    user_id REFERENCES users(id),
-    commitment INTEGER
-);
-
-CREATE TABLE group_events (
-    group_id REFERENCES groups(id),
-    event_id REFERENCES events(id)
-);
-
-CREATE TABLE user_interests (
-    user_id REFERENCES users(id),
-    interest_id REFERENCES interests(id),
-    score INTEGER
-);
-
-CREATE TABLE user_events (
-    user_id REFERENCES users(id),
-    event_id REFERENCES events(id),
-    attended INTEGER,
-    rsvp INTEGER
-);
-"#;
+    fn into_status_code(self) -> Result<Self::Value, StatusCode> {
+        match self {
+            Ok(v) => Ok(v),
+            Err(err) => {
+                error!("error occurred {err:?}");
+                Err(StatusCode::INTERNAL_SERVER_ERROR)
+            }
+        }
+    }
+}
