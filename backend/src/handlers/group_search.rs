@@ -36,7 +36,7 @@ fn handle_imp(
         }
     }
 
-    let mut stmt = conn.prepare("SELECT group_id FROM groups WHERE commitment = ?")?;
+    let mut stmt = conn.prepare("SELECT id FROM groups WHERE commitment = ?")?;
 
     for commmitment in options.commitment {
         let mut rows = stmt.query(params![commmitment])?;
@@ -46,7 +46,7 @@ fn handle_imp(
         }
     }
 
-    let mut stmt = conn.prepare("SELECT group_id FROM groups WHERE meeting_day = ?")?;
+    let mut stmt = conn.prepare("SELECT id FROM groups WHERE meeting_day = ?")?;
 
     for day in options.meeting_day {
         let mut rows = stmt.query(params![day])?;
