@@ -9,7 +9,7 @@ VALUES
     (0, "Stanford Space Initiative", "ssi@stanford.edu", "stanfordssi.org", NULL, NULL),
     (1, "Stanford Women in Business", NULL, NULL, NULL, NULL),
     (2, "Stanford Polo Club", NULL, NULL, NULL, NULL),
-    (3, "Stanford Fashion X", NULL, NULL, NULL, NULL),
+    (3, "Stanford FashionX", NULL, NULL, NULL, NULL),
     (4, "Stanford Women in Design", NULL, NULL, NULL, NULL)
 ;
 
@@ -26,9 +26,17 @@ VALUES
 
 INSERT INTO group_tags
 VALUES
-    (0, "Science"),
-    (0, "Math"),
-    (0, "Engineering")
+    (0, "Engineering"),
+    (0, "Tech"),
+    (1, "Entrepreneurship"),
+    (1, "Tech"),
+    (1, "Design"),
+    (2, "Outdoors"),
+    (2, "Sports"),
+    (3, "Design"),
+    (3, "Engineering"),
+    (3, "Tech"), 
+    (4, "Design")
 ;
 
 INSERT INTO group_members
