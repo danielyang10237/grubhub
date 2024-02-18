@@ -5,12 +5,17 @@ import "../css/inbox.css";
 
 const Inbox = () => {
   const [mails, setMails] = useState([]);
+  const [selectedMail, setSelectedMail] = useState(null);
+
+  const setCurrentMail = (mail) => {
+    setSelectedMail(mail);
+  };
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/user/0/inbox")
+      .get("http://localhost:3001/users/0/inbox")
       .then((response) => {
-        setMails(response.data);
+        // setMails(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -25,7 +30,7 @@ const Inbox = () => {
         <div className="mail-container">
           <div className="mails">
             {mails.map((mail, index) => (
-              <div key={index} className={`mail`}>
+              <div key={index} className={`mail`} onClick={()=>{setCurrentMail(mail.announcement)}}>
                 {mail.viewed ? null : <div className={"read-bubble"}></div>}
                 <div className="mail-tag">
                   <p className="mail-sender">{mail.sender}</p>
@@ -35,7 +40,13 @@ const Inbox = () => {
               </div>
             ))}
           </div>
-          <div className="mail-content"></div>
+          <div className="mail-content">
+            {mails.map((mail, index) => (
+              <div key={index} className={`mail ${mail.announcement === selectedMail} ? "" : "hidden"`}>
+                <h3>{mail.title}</h3>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
       <img

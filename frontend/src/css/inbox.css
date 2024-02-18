@@ -72,3 +72,7 @@
   flex: 0.75 1 0;
   background-color: thistle;
 }
+
+.hidden {
+  display: none;
+}
