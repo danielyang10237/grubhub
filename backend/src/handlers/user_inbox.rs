@@ -9,12 +9,13 @@ use tracing::instrument;
 
 use crate::{
     connection::{connect, ConnectionRef},
+    handlers::group::get_group,
     types::{AnnouncementId, UserId, UserInboxEntry, UserInboxResponse},
     IntoStatusCode,
 };
 
 #[instrument]
-pub async fn handle(Path(user_id): Path<UserId>) -> Result<Json<UserInboxResponse>, StatusCode> {
+pub async fn handle(Path(user_id): Path<UserId>) -> Result<Json<Vec<UserInboxEntry>>, StatusCode> {
     let conn = connect().await.into_status_code()?;
 
     spawn_blocking(move || get_user_inbox_impl(user_id, conn))
@@ -27,7 +28,7 @@ pub async fn handle(Path(user_id): Path<UserId>) -> Result<Json<UserInboxRespons
 fn get_user_inbox_impl(
     user_id: UserId,
     conn: ConnectionRef,
-) -> color_eyre::Result<UserInboxResponse> {
+) -> color_eyre::Result<Vec<UserInboxEntry>> {
     struct Relation {
         announcement: AnnouncementId,
         viewed: bool,
@@ -61,12 +62,15 @@ fn get_user_inbox_impl(
                 ))
             })?;
 
+        let group_name = get_group(group, &conn)?.expect("error").name;
+
         let entry = UserInboxEntry {
             body,
             group,
             title,
             sender,
             time,
+            group_name,
             announcement: rel.announcement,
             viewed: rel.viewed,
         };
@@ -83,5 +87,5 @@ fn get_user_inbox_impl(
         e.time = time.format("%m/%d/%Y, %H:%M").to_string();
     }
 
-    Ok(UserInboxResponse { entries })
+    Ok(entries)
 }

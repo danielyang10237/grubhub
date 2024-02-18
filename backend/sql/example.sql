@@ -15,8 +15,8 @@ VALUES
 
 INSERT INTO announcements
 VALUES
-    (0, 0, "jsiskind@stanford.edu", "2022-09-27 12:12:00Z", "Welcome!", "Welcome to SSI y'all!"),
-    (1, 0, "jsiskind@stanford.edu", "2022-09-27 12:13:00Z", "Get to work", "Now that y'all have had some time to settle in to your new roles at SSI, we really ought to have finished this mars mission last week. Get crackin'")
+    (0, 0, "jsiskind@stanford.edu", "2022-09-27 12:12:00Z", "Welcome!", "Welcome", "Welcome to SSI y'all!"),
+    (1, 0, "jsiskind@stanford.edu", "2022-09-27 12:13:00Z", "Get to work", "Get cracking", "Now that y'all have had some time to settle in to your new roles at SSI, we really ought to have finished this mars mission last week. Get crackin'")
 ;
 
 INSERT INTO user_announcements
