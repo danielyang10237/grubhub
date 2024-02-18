@@ -11,18 +11,22 @@ use tracing::{info, instrument};
 
 use crate::{
     connection::{connect, ConnectionRef},
-    types::{AnnouncementId, UserId, UserInboxEntry, UserInboxResponse},
+    types::{AnnouncementId, GroupId, GroupResponse, UserId, UserInboxEntry, UserInboxResponse},
     IntoStatusCode,
 };
+
+mod group_search;
 
 pub fn router() -> Router {
     Router::new()
         .route("/", get(|| async { "Hello, World!" }))
-        .route("/users/:userid", get(user_get))
-        .route("/users/:userid/inbox", get(get_user_inbox))
-        .route("/users/:userid/rsvp/:eventid", get(user_rsvp_get))
-        .route("/users/:userid/rsvp/:eventid", put(user_rsvp_put))
-        .route("/users/:userid/attended/:eventid", put(user_attended))
+        .route("/api/users/:userid", get(user_get))
+        .route("/api/users/:userid/inbox", get(get_user_inbox))
+        .route("/api/groups/:groupid", get(group))
+        .route("/api/groups/search", get(group_search::handle))
+        .route("/api/users/:userid/rsvp/:eventid", get(user_rsvp_get))
+        .route("/api/users/:userid/rsvp/:eventid", put(user_rsvp_put))
+        .route("/api/users/:userid/attended/:eventid", put(user_attended))
 }
 
 async fn user_rsvp_put(Path((user_id, event_id)): Path<(u32, u32)>) -> Result<(), StatusCode> {
@@ -86,6 +90,31 @@ async fn get_user_inbox(
         .into_status_code()?
         .into_status_code()
         .map(Json)
+}
+
+#[instrument]
+async fn group(Path(group_id): Path<GroupId>) -> Result<Json<GroupResponse>, StatusCode> {
+    let conn = connect().await.into_status_code()?;
+
+    let group = conn
+        .query_row(
+            "SELECT name, url, email FROM groups WHERE id = ?",
+            params![group_id],
+            |row| {
+                Ok(GroupResponse {
+                    email: row.get("email")?,
+                    name: row.get("name")?,
+                    url: row.get("url")?,
+                })
+            },
+        )
+        .optional()
+        .into_status_code()?;
+
+    match group {
+        Some(v) => Ok(Json(v)),
+        None => Err(StatusCode::NOT_FOUND),
+    }
 }
 
 #[instrument]

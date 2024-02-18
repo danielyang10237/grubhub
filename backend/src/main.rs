@@ -9,7 +9,7 @@ use tokio::{fs, net::TcpListener};
 use tracing::{error, info, instrument};
 use tracing_subscriber::util::SubscriberInitExt;
 
-use crate::connection::connect;
+use crate::{connection::connect, handlers::router};
 
 mod connection;
 mod example;
@@ -35,15 +35,13 @@ async fn main2() -> Result<()> {
     setup().await?;
     example::example_setup().await?;
 
-    let app = handlers::router();
-
     let port = 3000;
     let addr = SocketAddrV4::new(Ipv4Addr::new(0, 0, 0, 0), port);
     let listener = TcpListener::bind(addr).await?;
 
     info!("listening on {addr}");
 
-    axum::serve(listener, app).await?;
+    axum::serve(listener, router()).await?;
     Ok(())
 }
 

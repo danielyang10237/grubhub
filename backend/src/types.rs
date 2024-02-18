@@ -26,12 +26,35 @@ pub struct UserInboxResponse {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+pub struct GroupResponse {
+    pub name: String,
+    pub url: Option<String>,
+    pub email: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct UserInboxEntry {
     pub group: GroupId,
     pub title: String,
     pub body: String,
     pub viewed: bool,
     pub announcement: AnnouncementId,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct GroupSearchOptions {
+    pub tags: Vec<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct GroupSearchResponse {
+    pub entries: Vec<GroupSearchEntry>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct GroupSearchEntry {
+    pub id: GroupId,
+    pub name: String,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
@@ -57,6 +80,12 @@ pub struct GroupId(u32);
 impl FromSql for GroupId {
     fn column_result(value: rusqlite::types::ValueRef<'_>) -> rusqlite::types::FromSqlResult<Self> {
         u32::column_result(value).map(Self)
+    }
+}
+
+impl ToSql for GroupId {
+    fn to_sql(&self) -> rusqlite::Result<rusqlite::types::ToSqlOutput<'_>> {
+        self.0.to_sql()
     }
 }
 
