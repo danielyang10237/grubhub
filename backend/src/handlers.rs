@@ -23,4 +23,10 @@ pub fn router() -> Router {
                 .allow_methods([Method::GET, Method::POST])
                 .allow_origin(Any),
         )
+        .layer(
+            CorsLayer::new()
+                .allow_methods([Method::GET, Method::POST])
+                .allow_origin(Any)
+                .allow_headers(Any),
+        )
 }

@@ -1,0 +1,78 @@
+.App {
+  text-align: center;
+}
+
+* {
+  font-family: "Inria Sans", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+
+.App-header {
+  background-color: #000000;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.background-image {
+  width: 100%;
+  min-height: 100vh;
+  position: fixed;
+  z-index: 1;
+  object-fit: cover;
+}
+
+.title-container {
+  z-index: 2;
+}
+
+.title1 {
+  margin: 0;
+  text-align: left;
+  opacity: 1;
+  font-weight: 400;
+  font-size: 50px;
+}
+
+.title2 {
+  margin: 0;
+  text-align: left;
+  opacity: 1;
+  font-weight: 400;
+  font-size: 95px;
+}
+
+.title3 {
+  margin: 0;
+  font-size: 27px;
+  font-weight: 440;
+}
+
+.red-wave {
+  position: absolute;
+  bottom: 0;
+  height: 40%;
+  width: 100%;
+  z-index: 1;
+  object-position: top;
+  object-fit: cover;
+  overflow: hidden;
+}
+
+.table-header {
+  color: white;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  height: 50px;
+  display: flex;
+  align-items: center; /* This vertically centers your items */
+  justify-content: center; /* This horizontally centers your items */
+  border-bottom: 2px solid black;
+}
