@@ -7,7 +7,9 @@ CREATE TABLE groups (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     email TEXT,
-    url TEXT
+    url TEXT,
+    description TEXT,
+    profile_photo_url TEXT
 );
 
 CREATE TABLE events (

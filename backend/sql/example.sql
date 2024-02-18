@@ -6,11 +6,11 @@ VALUES
 
 INSERT INTO groups
 VALUES
-    (0, "Stanford Space Initiative", "ssi@stanford.edu", "stanfordssi.org"),
-    (1, "Stanford Women in Business", NULL, NULL),
-    (2, "Stanford Polo Club", NULL, NULL),
-    (3, "Stanford Fashion X", NULL, NULL),
-    (4, "Stanford Women in Design", NULL, NULL)
+    (0, "Stanford Space Initiative", "ssi@stanford.edu", "stanfordssi.org", NULL, NULL),
+    (1, "Stanford Women in Business", NULL, NULL, NULL, NULL),
+    (2, "Stanford Polo Club", NULL, NULL, NULL, NULL),
+    (3, "Stanford Fashion X", NULL, NULL, NULL, NULL),
+    (4, "Stanford Women in Design", NULL, NULL, NULL, NULL)
 ;
 
 INSERT INTO announcements

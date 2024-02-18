@@ -31,6 +31,8 @@ pub struct GroupResponse {
     pub url: Option<String>,
     pub email: Option<String>,
     pub tags: Vec<String>,
+    pub description: Option<String>,
+    pub profile_photo_url: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

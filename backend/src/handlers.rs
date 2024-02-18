@@ -11,15 +11,9 @@ mod user_inbox;
 
 pub fn router() -> Router {
     Router::new()
-        .route("/api/groups/:groupid", get(group::handle))
-        .route("/api/groups/search", get(group_search::handle))
-        .route("/api/users/:userid/inbox", get(user_inbox::handle))
-    // .route("/", get(|| async { "Hello, World!" }))
-    // .route("/api/users/:userid", get(user_get))
-    // .route("/api/users/:userid/inbox", get(get_user_inbox))
-    // .route("/api/users/:userid/rsvp/:eventid", get(user_rsvp_get))
-    // .route("/api/users/:userid/rsvp/:eventid", put(user_rsvp_put))
-    // .route("/api/users/:userid/attended/:eventid", put(user_attended))
+        .route("/groups/:groupid", get(group::handle))
+        .route("/groups/search", get(group_search::handle))
+        .route("/users/:userid/inbox", get(user_inbox::handle))
 }
 
 #[instrument]

@@ -1,5 +1,3 @@
-use std::collections::HashSet;
-
 use axum::{extract::Path, http::StatusCode, Json};
 use fallible_iterator::FallibleIterator;
 use rusqlite::{params, OptionalExtension};
@@ -7,7 +5,7 @@ use tracing::instrument;
 
 use crate::{
     connection::{connect, ConnectionRef},
-    types::{GroupId, GroupResponse, GroupSearchEntry, GroupSearchOptions, GroupSearchResponse},
+    types::{GroupId, GroupResponse},
     IntoStatusCode,
 };
 
@@ -25,17 +23,21 @@ fn handle_imp(group_id: GroupId, conn: ConnectionRef) -> color_eyre::Result<Opti
         email: Option<String>,
         name: String,
         url: Option<String>,
+        profile_photo_url: Option<String>,
+        description: Option<String>,
     }
 
     let group = conn
         .query_row(
-            "SELECT name, url, email FROM groups WHERE id = ?",
+            "SELECT name, url, email, profile_photo_url, description FROM groups WHERE id = ?",
             params![group_id],
             |row| {
                 Ok(PartialResponse {
                     email: row.get("email")?,
                     name: row.get("name")?,
                     url: row.get("url")?,
+                    profile_photo_url: row.get("profile_photo_url")?,
+                    description: row.get("description")?,
                 })
             },
         )
@@ -54,6 +56,8 @@ fn handle_imp(group_id: GroupId, conn: ConnectionRef) -> color_eyre::Result<Opti
         name: partial.name,
         url: partial.url,
         email: partial.email,
+        description: partial.description,
+        profile_photo_url: partial.profile_photo_url,
         tags,
     }))
 }
