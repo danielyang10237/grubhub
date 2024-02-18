@@ -7,6 +7,7 @@ use crate::{connection::connect, IntoStatusCode};
 
 mod group;
 mod group_search;
+mod tags_all;
 mod user_inbox;
 
 pub fn router() -> Router {
@@ -14,6 +15,7 @@ pub fn router() -> Router {
         .route("/groups/:groupid", get(group::handle))
         .route("/groups/search", get(group_search::handle))
         .route("/users/:userid/inbox", get(user_inbox::handle))
+        .route("/tags/all", get(tags_all::handle))
 }
 
 #[instrument]

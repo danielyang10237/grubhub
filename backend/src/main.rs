@@ -22,11 +22,7 @@ async fn main() -> Result<()> {
 }
 
 async fn main2() -> Result<()> {
-    tracing_subscriber::fmt()
-        // .with_env_filter(EnvFilter::from_default_env())
-        .pretty()
-        .finish()
-        .init();
+    tracing_subscriber::fmt().pretty().finish().init();
 
     _ = fs::remove_file("treehacks.db").await;
 
