@@ -1,19 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "../css/dropdown.css"; // Ensure your CSS styles are correctly set up
 
 const DropDown = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   // Initialize checkedItems as a state to track the checked status of each option
   const [checkedItems, setCheckedItems] = useState({});
-
-  // Initialize the checkedItems state based on props
-  useEffect(() => {
-    const initialCheckedItems = props.options.reduce((acc, option) => {
-      acc[option] = false;
-      return acc;
-    }, {});
-    setCheckedItems(initialCheckedItems);
-  }, [props.options]);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 
@@ -27,6 +18,8 @@ const DropDown = (props) => {
     setCheckedItems(updatedCheckedItems);
     // Call the setFilter prop with the updated checked items
     props.setFilter(updatedCheckedItems, props.dropdown);
+
+    console.log(checkedItems);
   };
 
   return (

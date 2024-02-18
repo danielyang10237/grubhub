@@ -2,6 +2,14 @@ import { React, useState, useEffect } from "react";
 import "../css/groupstable.css";
 
 const TableRow = ({ group }) => {
+  const openLink = () => {
+    let url = group.url;
+    console.log(url);
+    if (url !== "") {
+      window.location.href = "https://" + url;
+    }
+  };
+
   return (
     <div className="table-header-row bottom-border not-top">
       <div className="group-column">{group.groupName}</div>
@@ -25,7 +33,9 @@ const TableRow = ({ group }) => {
         ))}
       </div>
       <div className="join-column">
-        <button className="join-button">Join</button>
+        <button onClick={openLink} className="join-button">
+          Join
+        </button>
       </div>
     </div>
   );
