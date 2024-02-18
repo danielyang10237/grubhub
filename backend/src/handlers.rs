@@ -19,7 +19,7 @@ pub fn router() -> Router {
         .route("/groups/all", get(groups_all::handle))
         .route("/users/:userid/inbox", get(user_inbox::handle))
         .route("/tags/all", get(tags_all::handle))
-        .route("/users/mark_as_read", get(mark_as_read::handle))
+        .route("/users/mark_as_read", post(mark_as_read::handle))
         .layer(
             CorsLayer::new()
                 .allow_methods([Method::GET, Method::POST])

@@ -18,8 +18,6 @@ const DropDown = (props) => {
     setCheckedItems(updatedCheckedItems);
     // Call the setFilter prop with the updated checked items
     props.setFilter(updatedCheckedItems, props.dropdown);
-
-    console.log(checkedItems);
   };
 
   return (

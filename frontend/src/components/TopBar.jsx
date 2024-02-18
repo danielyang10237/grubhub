@@ -12,7 +12,7 @@ export default function TopBar() {
           <h3>Stanford</h3>
         </div>
         <div className="right-side">
-          <Link className="menu-link" to="/home">
+          <Link className="menu-link" to="/">
             Home
           </Link>
           <Link className="menu-link" to="/inbox">

@@ -11,22 +11,8 @@ const Inbox = () => {
     setSelectedMail(mail);
   };
 
-  const updateMail = (announcement, id) => {
-    axios
-      .post("http://localhost:3001/users/markasread", {
-        announcement: announcement,
-        user: id 
-      })
-      .then((response) => {
-        setMails(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
-  useEffect(() => {
-    axios
+  const getMailAPI = async () => {
+    await axios
       .get("http://localhost:3001/users/1/inbox")
       .then((response) => {
         setMails(response.data);
@@ -34,6 +20,24 @@ const Inbox = () => {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const updateMail = (announcement, id) => {
+    axios
+      .post("http://localhost:3001/users/mark_as_read", {
+        announcement: announcement,
+        user: id,
+      })
+      .then((response) => {
+        getMailAPI();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    getMailAPI();
   }, []);
 
   return (
@@ -47,15 +51,19 @@ const Inbox = () => {
               <div
                 key={index}
                 className={`mail ${
-                  mail.announcement === selectedMail
-                 ? "selected-mail" : ""}`}
+                  mail.announcement === selectedMail ? "selected-mail" : ""
+                }`}
                 onClick={() => {
                   setCurrentMail(mail.announcement);
                   updateMail(mail.announcement, 1);
                 }}
               >
                 <div className="mail-sender">
-                  {mail.viewed ? <div></div> : <div className={"read-bubble"}></div>}
+                  {mail.viewed ? (
+                    <div></div>
+                  ) : (
+                    <div className={"read-bubble"}></div>
+                  )}
                   {mail.sender}
                 </div>
                 <p className="mail-time">{mail.time}</p>
@@ -67,8 +75,8 @@ const Inbox = () => {
               <div
                 key={index}
                 className={`message ${
-                  mail.announcement === selectedMail
-                 ? "" : "hidden"}`}
+                  mail.announcement === selectedMail ? "" : "hidden"
+                }`}
               >
                 <h3 className="subject-line">Subject: {mail.subject}</h3>
                 <h4 className="mail-words">{mail.body}</h4>

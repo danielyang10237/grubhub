@@ -18,6 +18,7 @@ VALUES
     (0, 0, "jsiskind@stanford.edu", "2022-09-27 12:12:00Z", "Welcome!", "Welcome", "Welcome to SSI y'all!"),
     (1, 0, "jsiskind@stanford.edu", "2022-09-27 12:13:00Z", "Get to work", "Get cracking", "Now that y'all have had some time to settle in to your new roles at SSI, we really ought to have finished this mars mission last week. Get crackin'"),
     (2, 0, "njain@stanford.edu", "2022-09-26 01:00:00Z", "Starship!", "Starship watch party!", "Hello all, SSI will be hosting a watch party for the third starship test flight. We'd love if you'd join!"),
+    (4, 0, "urgent@stanford.edu", "2022-09-26 03:40:00Z", "Hello?DF???!", "Personal Hygiene", "Hello Bryce, I have noticed that you have not been showering recently. Please take care of this. It is important to maintain personal hygiene. Additionally, please stop leaving your dirty laundry in the hall way. It is not fair to the rest of us. Thank you."),
     (3, 0, "emilyredmond@stanford.edu", "2023-09-26 01:00:00Z", "[swibboard23] W6 SWIB This Week ", "[swibboard23] W6 SWIB This Week ", "Hi SWIB,
 
 Wow, what a week of SWIB! We welcomed SWIB and Stanford alums Trinity and Avery from McKinsey, learning you can enter consulting from a CS, Mechanical Engineering, or History background – anything is possible! To close out our week, we had our Sequoia trek with SWID – thank you to Chi and Ines for leading! Read on to see what to look forward to this week in SWIB. Wishing you all luck for mid-quarter exams! 🤓❣️
@@ -39,7 +40,7 @@ VALUES
     (1, 1, 0),
     (0, 2, 0),
     (1, 2, 0),
-
+    (1, 4, 0),
     (1, 3, 1)
 ;
 
