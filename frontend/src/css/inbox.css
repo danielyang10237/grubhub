@@ -1,0 +1,98 @@
+.inbox-title {
+  font-weight: 500;
+  background-color: rgba(0, 0, 0, 0.3);
+  margin: 0;
+  padding: 20px 0 20px 0;
+  font-size: 50px;
+  width: 100%;
+  text-align: center;
+}
+
+.mail-container {
+  background-color: white;
+  width: 85%;
+  min-height: 700px;
+  margin-top: 30px;
+  display: flex;
+  border: 2px solid black;
+}
+
+.read-bubble {
+  border-radius: 50%;
+  height: 15px;
+  width: 15px;
+  margin-top: 8px;
+  margin-left: 10px;
+  background-color: rgb(149, 19, 19)
+}
+
+
+.mails {
+  flex: 0.25 1 0;
+  background-color: rgb(149, 135, 115);
+  border-right: 2px solid rgba(0, 0, 0, 0.333);
+}
+
+.mail {
+  width: 100%;
+  height: 80px;
+  overflow: hidden;
+  border-bottom: 2px solid rgb(255, 255, 255);
+  cursor: pointer;
+}
+
+.mail:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.mail-sender {
+  font-size: 20px;
+  font-weight: 500;
+  justify-content: space-between;
+  margin: 0;
+  text-align: right;
+  font-weight: 600;
+  padding-top: 8px;
+  padding-right: 4px;
+  display: flex;
+}
+
+.mail-time {
+  text-align: right;
+  padding-right: 10px;
+  margin: 0;
+}
+
+.mail-title {
+  text-align: left;
+  margin: 0;
+  font-weight: 400;
+}
+
+.mail-content {
+  flex: 0.75 1 0;
+  background-color: rgb(101, 108, 95);
+}
+
+.hidden {
+  display: none;
+}
+
+.selected-mail {
+  background-color: rgba(25, 25, 25, 0.297);
+}
+
+.subject-line {
+  font-weight: 600;
+  font-size: 26px;
+  text-align: left;
+  background-color: rgba(240, 248, 255, 0.171);
+  margin: 0;
+  padding: 20px;
+}
+
+.mail-words {
+  font-weight: 400;
+  text-align: left;
+  padding-left: 20px;
+}

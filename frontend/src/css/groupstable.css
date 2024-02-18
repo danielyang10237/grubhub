@@ -1,0 +1,45 @@
+.table-container {
+  flex: 0.8;
+}
+
+.table-header-row {
+    display: grid;
+    grid-template-columns: 0.25fr 0.35fr 0.15fr 0.15fr 0.1fr;
+}
+
+.top > *:not(:last-child) {
+    border-right: 2px solid black;
+}
+
+.table-header-row > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.join-button {
+    height: 100%;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    /* underline */
+    text-decoration: underline;
+    width: 100%;
+}
+
+.join-button:hover {
+    color: rgb(128, 35, 35);
+    background-color: rgb(224, 184, 184);
+}
+
+.bottom-border {
+    border-bottom: 2px solid rgba(0, 0, 0, 0.33);
+    min-height: 60px;
+}
+
+.not-top > *:not(:last-child) {
+    border-right: 2px solid rgba(0, 0, 0, 0.33);
+}
