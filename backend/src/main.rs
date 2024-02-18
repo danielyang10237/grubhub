@@ -31,7 +31,7 @@ async fn main2() -> Result<()> {
     setup().await?;
     example::example_setup().await?;
 
-    let port = 3000;
+    let port = 3001;
     let addr = SocketAddrV4::new(Ipv4Addr::new(0, 0, 0, 0), port);
     let listener = TcpListener::bind(addr).await?;
 
