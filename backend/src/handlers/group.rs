@@ -1,4 +1,5 @@
 use axum::{extract::Path, http::StatusCode, Json};
+use color_eyre::eyre::bail;
 use fallible_iterator::FallibleIterator;
 use rusqlite::{params, OptionalExtension};
 use tracing::instrument;
@@ -12,13 +13,16 @@ use crate::{
 #[instrument]
 pub async fn handle(Path(group_id): Path<GroupId>) -> Result<Json<GroupResponse>, StatusCode> {
     let conn = connect().await.into_status_code()?;
-    match handle_imp(group_id, conn).into_status_code()? {
+    match get_group(group_id, &conn).into_status_code()? {
         Some(v) => Ok(Json(v)),
         None => Err(StatusCode::NOT_FOUND),
     }
 }
 
-fn handle_imp(group_id: GroupId, conn: ConnectionRef) -> color_eyre::Result<Option<GroupResponse>> {
+pub fn get_group(
+    group_id: GroupId,
+    conn: &ConnectionRef,
+) -> color_eyre::Result<Option<GroupResponse>> {
     struct PartialResponse {
         email: Option<String>,
         name: String,
@@ -59,5 +63,22 @@ fn handle_imp(group_id: GroupId, conn: ConnectionRef) -> color_eyre::Result<Opti
         description: partial.description,
         profile_photo_url: partial.profile_photo_url,
         tags,
+        id: group_id,
     }))
+}
+
+pub fn get_groups(
+    groups: impl IntoIterator<Item = GroupId>,
+    conn: &ConnectionRef,
+) -> color_eyre::Result<Vec<GroupResponse>> {
+    let mut result = Vec::new();
+    for id in groups {
+        let group = get_group(id, &conn)?;
+        if let Some(g) = group {
+            result.push(g);
+        } else {
+            bail!("inconsistent database state");
+        }
+    }
+    Ok(result)
 }

@@ -6,14 +6,16 @@ use tracing::instrument;
 
 use crate::{
     connection::{connect, ConnectionRef},
-    types::{GroupId, GroupSearchEntry, GroupSearchOptions, GroupSearchResponse},
+    types::{GroupId, GroupResponse, GroupSearchOptions},
     IntoStatusCode,
 };
+
+use super::group::get_groups;
 
 #[instrument]
 pub async fn handle(
     options: Json<GroupSearchOptions>,
-) -> Result<Json<GroupSearchResponse>, StatusCode> {
+) -> Result<Json<Vec<GroupResponse>>, StatusCode> {
     let conn = connect().await.into_status_code()?;
     handle_imp(options.0, conn).into_status_code().map(Json)
 }
@@ -21,10 +23,10 @@ pub async fn handle(
 fn handle_imp(
     options: GroupSearchOptions,
     conn: ConnectionRef,
-) -> color_eyre::Result<GroupSearchResponse> {
+) -> color_eyre::Result<Vec<GroupResponse>> {
     let mut groups = HashSet::new();
 
-    let mut stmt = conn.prepare("SELECT group_id FROM group_tags WHERE tag = ?")?;
+    let mut stmt = conn.prepare("SELECT group_id FROM group_tags WHERE LOWER(tag) = LOWER(?)")?;
 
     for tag in options.tags {
         let mut rows = stmt.query(params![tag])?;
@@ -34,13 +36,5 @@ fn handle_imp(
         }
     }
 
-    let mut stmt = conn.prepare("SELECT name FROM groups WHERE id = ?")?;
-    let mut response = Vec::new();
-
-    for id in groups {
-        let name = stmt.query_row(params![id], |row| row.get(0))?;
-        response.push(GroupSearchEntry { id, name });
-    }
-
-    Ok(GroupSearchResponse { entries: response })
+    get_groups(groups, &conn)
 }

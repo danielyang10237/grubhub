@@ -27,6 +27,7 @@ pub struct UserInboxResponse {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct GroupResponse {
+    pub id: GroupId,
     pub name: String,
     pub url: Option<String>,
     pub email: Option<String>,
