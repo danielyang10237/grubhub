@@ -18,6 +18,7 @@ const Directory = () => {
       newGroup.groupName = input_groups[i].name;
       newGroup.interests = input_groups[i].tags;
       newGroup.meetingTime = input_groups[i].meeting_day;
+      newGroup.url = input_groups[i].url;
       const commitment = input_groups[i].commitment;
       const result = Array(commitment)
         .fill(true)
