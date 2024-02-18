@@ -72,5 +72,6 @@ pub fn get_groups(
             bail!("inconsistent database state");
         }
     }
+    result.sort_by_key(|g| g.id);
     Ok(result)
 }

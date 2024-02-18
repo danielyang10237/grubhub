@@ -44,6 +44,8 @@ pub struct UserInboxEntry {
     pub title: String,
     pub body: String,
     pub viewed: bool,
+    pub sender: String,
+    pub time: String,
     pub announcement: AnnouncementId,
 }
 
