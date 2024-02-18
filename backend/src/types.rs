@@ -52,9 +52,9 @@ pub struct GroupSearchOptions {
     #[serde(default)]
     pub tags: Vec<String>,
     #[serde(default)]
-    pub commitment: Option<i32>,
+    pub commitment: Vec<i32>,
     #[serde(default)]
-    pub meeting_day: Option<String>,
+    pub meeting_day: Vec<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
