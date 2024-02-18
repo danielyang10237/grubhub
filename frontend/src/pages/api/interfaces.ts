@@ -1,3 +1,4 @@
+
 /* Get information on a single group
  * Endpoint: GET /groups/<group_id>
  */
