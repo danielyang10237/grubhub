@@ -1,7 +1,9 @@
 use axum::{
+    http::Method,
     routing::{get, post},
     Router,
 };
+use tower_http::cors::{Any, CorsLayer};
 
 mod group;
 mod group_search;
@@ -11,6 +13,11 @@ mod user_inbox;
 
 pub fn router() -> Router {
     Router::new()
+        .layer(
+            CorsLayer::new()
+                .allow_methods([Method::GET, Method::POST])
+                .allow_origin(Any),
+        )
         .route("/groups/:groupid", get(group::handle))
         .route("/groups/search", post(group_search::handle))
         .route("/groups/all", get(groups_all::handle))

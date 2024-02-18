@@ -34,6 +34,8 @@ pub struct GroupResponse {
     pub tags: Vec<String>,
     pub description: Option<String>,
     pub profile_photo_url: Option<String>,
+    pub commitment: Option<i32>,
+    pub meeting_day: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -47,7 +49,12 @@ pub struct UserInboxEntry {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct GroupSearchOptions {
+    #[serde(default)]
     pub tags: Vec<String>,
+    #[serde(default)]
+    pub commitment: Option<i32>,
+    #[serde(default)]
+    pub meeting_day: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

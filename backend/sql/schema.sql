@@ -9,7 +9,9 @@ CREATE TABLE groups (
     email TEXT,
     url TEXT,
     description TEXT,
-    profile_photo_url TEXT
+    profile_photo_url TEXT,
+    commitment INTEGER,
+    meeting_day TEXT
 );
 
 CREATE TABLE events (

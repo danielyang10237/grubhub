@@ -23,48 +23,40 @@ pub fn get_group(
     group_id: GroupId,
     conn: &ConnectionRef,
 ) -> color_eyre::Result<Option<GroupResponse>> {
-    struct PartialResponse {
-        email: Option<String>,
-        name: String,
-        url: Option<String>,
-        profile_photo_url: Option<String>,
-        description: Option<String>,
-    }
-
-    let group = conn
-        .query_row(
-            "SELECT name, url, email, profile_photo_url, description FROM groups WHERE id = ?",
-            params![group_id],
-            |row| {
-                Ok(PartialResponse {
-                    email: row.get("email")?,
-                    name: row.get("name")?,
-                    url: row.get("url")?,
-                    profile_photo_url: row.get("profile_photo_url")?,
-                    description: row.get("description")?,
-                })
-            },
-        )
-        .optional()?;
-
-    let Some(partial) = group else {
-        return Ok(None);
-    };
-
     let mut stmt = conn.prepare("SELECT tag FROM group_tags WHERE group_id = ?")?;
     let rows = stmt.query(params![group_id])?;
 
     let tags: Vec<String> = rows.map(|r| r.get(0)).collect()?;
 
-    Ok(Some(GroupResponse {
-        name: partial.name,
-        url: partial.url,
-        email: partial.email,
-        description: partial.description,
-        profile_photo_url: partial.profile_photo_url,
-        tags,
-        id: group_id,
-    }))
+    let group = conn
+        .query_row(
+            "SELECT
+                    name,
+                    url,
+                    email,
+                    profile_photo_url,
+                    description,
+                    commitment,
+                    meeting_day
+                FROM groups WHERE id = ?",
+            params![group_id],
+            |row| {
+                Ok(GroupResponse {
+                    email: row.get("email")?,
+                    name: row.get("name")?,
+                    url: row.get("url")?,
+                    profile_photo_url: row.get("profile_photo_url")?,
+                    description: row.get("description")?,
+                    commitment: row.get("commitment")?,
+                    meeting_day: row.get("meeting_day")?,
+                    tags,
+                    id: group_id,
+                })
+            },
+        )
+        .optional()?;
+
+    Ok(group)
 }
 
 pub fn get_groups(
@@ -73,7 +65,7 @@ pub fn get_groups(
 ) -> color_eyre::Result<Vec<GroupResponse>> {
     let mut result = Vec::new();
     for id in groups {
-        let group = get_group(id, &conn)?;
+        let group = get_group(id, conn)?;
         if let Some(g) = group {
             result.push(g);
         } else {

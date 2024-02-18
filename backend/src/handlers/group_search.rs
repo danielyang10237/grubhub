@@ -36,5 +36,25 @@ fn handle_imp(
         }
     }
 
+    let mut stmt = conn.prepare("SELECT group_id FROM groups WHERE commitment = ?")?;
+
+    if let Some(c) = options.commitment {
+        let mut rows = stmt.query(params![c])?;
+        while let Some(r) = rows.next()? {
+            let id: GroupId = r.get(0)?;
+            groups.insert(id);
+        }
+    }
+
+    let mut stmt = conn.prepare("SELECT group_id FROM groups WHERE meeting_day = ?")?;
+
+    if let Some(day) = options.meeting_day {
+        let mut rows = stmt.query(params![day])?;
+        while let Some(r) = rows.next()? {
+            let id: GroupId = r.get(0)?;
+            groups.insert(id);
+        }
+    }
+
     get_groups(groups, &conn)
 }
