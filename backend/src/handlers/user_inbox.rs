@@ -45,13 +45,14 @@ fn get_user_inbox_impl(
         })
     });
 
-    let mut stmt =
-        conn.prepare("SELECT title, body, group_id, sender, time FROM announcements WHERE id = ?")?;
+    let mut stmt = conn.prepare(
+        "SELECT title, body, group_id, sender, time, subject FROM announcements WHERE id = ?",
+    )?;
 
     let mut entries = Vec::new();
 
     while let Some(rel) = relations.next()? {
-        let (title, body, group, sender, time) =
+        let (title, body, group, sender, time, subject) =
             stmt.query_row(params![rel.announcement], |row| {
                 Ok((
                     row.get(0)?,
@@ -59,6 +60,7 @@ fn get_user_inbox_impl(
                     row.get(2)?,
                     row.get(3)?,
                     row.get(4)?,
+                    row.get(5)?,
                 ))
             })?;
 
@@ -71,6 +73,7 @@ fn get_user_inbox_impl(
             sender,
             time,
             group_name,
+            subject,
             announcement: rel.announcement,
             viewed: rel.viewed,
         };
