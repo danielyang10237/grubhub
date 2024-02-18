@@ -16,6 +16,9 @@ use super::group::get_groups;
 pub async fn handle(
     options: Json<GroupSearchOptions>,
 ) -> Result<Json<Vec<GroupResponse>>, StatusCode> {
+    if options.tags.is_empty() && options.commitment.is_empty() && options.meeting_day.is_empty() {
+        return super::groups_all::handle().await;
+    }
     let conn = connect().await.into_status_code()?;
     handle_imp(options.0, conn).into_status_code().map(Json)
 }
