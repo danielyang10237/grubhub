@@ -5,16 +5,29 @@ import "../css/inbox.css";
 
 const Inbox = () => {
   const [mails, setMails] = useState([]);
-  const [selectedMail, setSelectedMail] = useState(0);
+  const [selectedMail, setSelectedMail] = useState(3);
 
   const setCurrentMail = (mail) => {
     setSelectedMail(mail);
-    console.log(mail);
   };
+
+  const updateMail = (announcement, id) => {
+    axios
+      .post("http://localhost:3001/users/markasread", {
+        announcement: announcement,
+        user: id 
+      })
+      .then((response) => {
+        setMails(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/users/0/inbox")
+      .get("http://localhost:3001/users/1/inbox")
       .then((response) => {
         setMails(response.data);
       })
@@ -38,12 +51,13 @@ const Inbox = () => {
                  ? "selected-mail" : ""}`}
                 onClick={() => {
                   setCurrentMail(mail.announcement);
+                  updateMail(mail.announcement, 1);
                 }}
               >
-                <p className="mail-sender">
+                <div className="mail-sender">
                   {mail.viewed ? <div></div> : <div className={"read-bubble"}></div>}
                   {mail.sender}
-                </p>
+                </div>
                 <p className="mail-time">{mail.time}</p>
               </div>
             ))}
