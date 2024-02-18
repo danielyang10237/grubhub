@@ -16,7 +16,8 @@ VALUES
 INSERT INTO announcements
 VALUES
     (0, 0, "jsiskind@stanford.edu", "2022-09-27 12:12:00Z", "Welcome!", "Welcome", "Welcome to SSI y'all!"),
-    (1, 0, "jsiskind@stanford.edu", "2022-09-27 12:13:00Z", "Get to work", "Get cracking", "Now that y'all have had some time to settle in to your new roles at SSI, we really ought to have finished this mars mission last week. Get crackin'")
+    (1, 0, "jsiskind@stanford.edu", "2022-09-27 12:13:00Z", "Get to work", "Get cracking", "Now that y'all have had some time to settle in to your new roles at SSI, we really ought to have finished this mars mission last week. Get crackin'"),
+    (2, 0, "njain@stanford.edu", "2022-09-26 01:00:00Z", "Starship!", "Starship watch party!", "Hello all, SSI will be hosting a watch party for the third starship test flight. We'd love if you'd join!")
 ;
 
 INSERT INTO user_announcements
@@ -24,7 +25,9 @@ VALUES
     (0, 0, 1),
     (1, 0, 0),
     (0, 1, 0),
-    (1, 1, 0)
+    (1, 1, 0),
+    (0, 2, 1),
+    (1, 2, 1)
 ;
 
 INSERT INTO group_tags
